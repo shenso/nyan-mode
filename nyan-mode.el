@@ -160,6 +160,12 @@ This can be t or nil."
   :type 'integer
   :group 'nyan)
 
+(defcustom nyan-cat-graphic-only nil
+  "Disable nyan-cat mode when graphics cannot be displayed."
+  :type '(choice (const :tag "Enabled" t)
+                 (const :tag "Disabled" nil))
+  :group 'nyan)
+
 ;;; Load images of Nyan Cat an it's rainbow.
 (defvar nyan-cat-image (if (image-type-available-p 'xpm)
                            (create-image nyan-cat-face-image 'xpm nil :ascent 'center)))
@@ -244,7 +250,7 @@ This can be t or nil."
 
 (defun nyan-create ()
   "Return the Nyan Cat indicator to be inserted into mode line."
-  (if (< (window-width) nyan-minimum-window-width)
+  (if (and (< (window-width) nyan-minimum-window-width) (or (not nyan-cat-graphic-only) (display-graphic-p)))
       ""                                ; disabled for too small windows
     (let* ((rainbows (nyan-number-of-rainbows))
            (outerspaces (- nyan-bar-length rainbows nyan-cat-size))
